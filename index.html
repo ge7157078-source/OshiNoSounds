@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100dvh;
+      overflow: hidden;
+      font-family: system-ui, sans-serif;
+    }
+
+    .barra-superior {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background-color: #000000;
+      transform-origin: left center;
+      transform: scaleX(0);
+      z-index: 30;
+      animation: cargar-barra 1.1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes cargar-barra {
+      0% {
+        transform: scaleX(0);
+      }
+      70% {
+        transform: scaleX(0.85);
+      }
+      100% {
+        transform: scaleX(1);
+        opacity: 0;
+      }
+    }
+
+    .fondo-escena {
+      position: fixed;
+      inset: -12px;
+      background-image: url("fondo.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      filter: blur(5px) brightness(0.85);
+      opacity: 0;
+      z-index: 1;
+      animation: fade-entrada 0.9s ease forwards;
+    }
+
+    .zona-logo {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      padding-top: 24px;
+      display: flex;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(-10px);
+      animation: aparecer-logo 0.8s ease 0.15s forwards;
+    }
+
+    .logo-arriba {
+      display: block;
+      width: 300px;
+      height: auto;
+      filter:
+        drop-shadow(2px 0 3px #ffffff)
+        drop-shadow(-2px 0 3px #ffffff)
+        drop-shadow(0 2px 3px #ffffff)
+        drop-shadow(0 -2px 3px #ffffff);
+    }
+
+    .zona-boton {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .marco-boton {
+      pointer-events: auto;
+      padding: 16px;
+      border-radius: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.85);
+      background-color: rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .texto-debajo {
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 28px;
+      letter-spacing: 2px;
+      color: #ffffff;
+      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+      margin-left: 12px;
+    }
+
+    .boton-imagen {
+      pointer-events: auto;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: transform 0.1s ease, filter 0.1s ease;
+    }
+
+    .boton-imagen img {
+      display: block;
+      width: clamp(130px, 24vw, 200px);
+      height: auto;
+    }
+
+    .boton-imagen:hover {
+      transform: scale(1.03);
+    }
+
+    .boton-imagen:active {
+      transform: scale(0.92);
+      filter: brightness(0.85);
+    }
+
+    @keyframes fade-entrada {
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes aparecer-logo {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <script>
+    const carpetaSonidos = "KanaSonidos/";
+    const totalSonidos = 5;
+    const extension = ".wav";
+
+    let audioActual = null;
+    let numeroActual = 1;
+
+    function reproducirSonidoOrden() {
+      if (audioActual) {
+        audioActual.pause();
+        audioActual.currentTime = 0;
+      }
+
+      audioActual = new Audio(`${carpetaSonidos}sonido (${numeroActual})${extension}`);
+      audioActual.play();
+
+      numeroActual++;
+      if (numeroActual > totalSonidos) {
+        numeroActual = 1;
+      }
+    }
+  </script>
+
+  <div class="barra-superior" aria-hidden="true"></div>
+
+  <div class="fondo-escena" aria-hidden="true"></div>
+
+  <header class="zona-logo">
+    <img src="ONS.png" alt="Logo" class="logo-arriba">
+  </header>
+
+  <div class="zona-boton">
+    <div class="marco-boton">
+      <button type="button" class="boton-imagen" onclick="reproducirSonidoOrden()">
+        <img src="kanita.png" alt="Botón">
+      </button>
+    </div>
+    <p class="texto-debajo">Arima Kana</p>
+  </div>
+</body>
+</html>
